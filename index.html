@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>나의 헬영성경 - John Chapter 1 (1-5)</title>
+    <style>
+        :root {
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-primary: #1e293b;
+            --accent-color: #1a365d;
+            --sub-accent: #2b6cb0;
+            --border-color: #e2e8f0;
+            --details-bg: #f1f5f9;
+            --word-hover: #e2e8f0;
+            --phonics-color: #c53030;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.8;
+            margin: 0;
+            padding: 24px 16px;
+            font-size: 1.15rem;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 28px;
+            padding-bottom: 16px;
+            border-bottom: 3px solid var(--accent-color);
+        }
+
+        h1 {
+            font-size: 2rem;
+            color: var(--accent-color);
+            margin: 0 0 8px 0;
+        }
+
+        .subtitle {
+            font-size: 1.05rem;
+            color: #64748b;
+        }
+
+        .verse-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 24px;
+            padding: 22px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+        }
+
+        .verse-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--accent-color);
+            margin-bottom: 16px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 8px;
+        }
+
+        .combined-verse {
+            background-color: #f8fafc;
+            border-left: 5px solid var(--sub-accent);
+            padding: 16px 18px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+
+        /* 1:1 한글 발음 줄바꿈 이탈 완벽 방지 */
+        .greek-text {
+            font-family: "SBL Greek", "Gentium Plus", "Times New Roman", serif;
+            font-size: 1.65rem;
+            color: #0f172a;
+            font-weight: 600;
+            line-height: 1.3;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px 12px;
+            align-items: flex-start;
+            word-break: keep-all;
+        }
+
+        .word-unit {
+            display: inline-flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            justify-content: flex-start !important;
+            cursor: pointer;
+            padding: 4px 6px;
+            border-radius: 6px;
+            white-space: nowrap !important;
+            word-break: keep-all !important;
+            transition: background-color 0.15s ease;
+        }
+
+        .word-unit:hover, .word-unit:active {
+            background-color: var(--word-hover);
+        }
+
+        .g-word {
+            color: var(--accent-color);
+            text-decoration: underline dotted #94a3b8;
+            font-size: 1.65rem;
+            white-space: nowrap;
+        }
+
+        .g-phonics {
+            font-size: 0.95rem;
+            color: var(--phonics-color);
+            font-weight: 600;
+            line-height: 1.1;
+            margin-top: 5px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            white-space: nowrap;
+        }
+
+        .clause-unit {
+            margin-bottom: 12px;
+            font-size: 1.15rem;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .clause-tag {
+            font-weight: bold;
+            color: var(--sub-accent);
+        }
+
+        .clause-eng {
+            color: #475569;
+            font-style: italic;
+            font-size: 1.05rem;
+        }
+
+        .audio-play-btn {
+            background-color: #e2e8f0;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            padding: 4px 10px;
+            color: var(--accent-color);
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: background-color 0.15s ease;
+        }
+
+        .audio-play-btn:hover {
+            background-color: #cbd5e1;
+        }
+
+        .toggle-btn {
+            display: block;
+            width: 100%;
+            background-color: #f8fafc;
+            border: 1px solid #cbd5e1;
+            color: var(--accent-color);
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1.05rem;
+            cursor: pointer;
+            text-align: center;
+            margin-top: 16px;
+            transition: background-color 0.2s ease;
+        }
+
+        .toggle-btn:hover {
+            background-color: #e2e8f0;
+        }
+
+        .details-panel {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background-color: var(--details-bg);
+            border-radius: 8px;
+            margin-top: 12px;
+        }
+
+        .details-content {
+            padding: 20px;
+            font-size: 1.05rem;
+        }
+
+        .section-h4 {
+            color: var(--accent-color);
+            margin: 16px 0 8px 0;
+            font-size: 1.15rem;
+        }
+
+        .section-h4:first-child {
+            margin-top: 0;
+        }
+
+        .literal-translation {
+            font-style: italic;
+            color: #334155;
+            background-color: #ffffff;
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 12px;
+            font-size: 1rem;
+        }
+
+        ul.grammar-list {
+            margin: 6px 0 12px 20px;
+            padding: 0;
+        }
+
+        ul.grammar-list li {
+            margin-bottom: 8px;
+        }
+
+        .g-term {
+            color: var(--sub-accent);
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: underline dotted;
+        }
+
+        .ipa {
+            color: #64748b;
+            font-size: 0.95rem;
+            font-family: monospace;
+            margin-left: 2px;
+        }
+
+        .insight-box {
+            background-color: #ffffff;
+            border-left: 4px solid var(--sub-accent);
+            padding: 12px 14px;
+            margin-top: 12px;
+            border-radius: 0 6px 6px 0;
+            font-size: 1.05rem;
+            color: #1e293b;
+        }
+
+        .collapse-bottom-btn {
+            display: block;
+            width: 100%;
+            background-color: #e2e8f0;
+            border: none;
+            color: #475569;
+            padding: 12px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .collapse-bottom-btn:hover {
+            background-color: #cbd5e1;
+        }
+
+        .active .details-panel {
+            max-height: 5000px;
+        }
+
+        /* Modal Popup System */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .modal-card {
+            background: #ffffff;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 100%;
+            padding: 24px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .modal-header {
+            font-size: 1.4rem;
+            color: var(--accent-color);
+            font-weight: bold;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-row {
+            margin-bottom: 10px;
+            font-size: 1.05rem;
+        }
+
+        .modal-label {
+            font-weight: bold;
+            color: #64748b;
+            display: inline-block;
+            width: 130px;
+        }
+
+        .modal-close-btn {
+            margin-top: 20px;
+            width: 100%;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 1.05rem;
+            cursor: pointer;
+        }
+
+        .audio-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.3rem;
+            padding: 0 4px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <header>
+        <h1>나의 헬영성경</h1>
+        <div class="subtitle">SBLGNT / NA28 Base Text | John Chapter 1 (1–5)</div>
+    </header>
+
+    <!-- John 1:1 -->
+    <div class="verse-card">
+        <div class="verse-title">📖 John 1:1</div>
+        <div class="combined-verse">
+            <div class="greek-text">
+                <div class="word-unit" onclick="showWord('Ἐν', 'en / 엔', 'ἐν (en)', '안에, ~에', 'in', '/ɪn/')"><span class="g-word">Ἐν</span><span class="g-phonics">엔</span></div>
+                <div class="word-unit" onclick="showWord('ἀρχῇ', 'archē / 아르케', 'ἀρχή (archē)', '태초, 시작', 'beginning', '/bɪˈɡɪn.ɪŋ/')"><span class="g-word">ἀρχῇ</span><span class="g-phonics">아르케</span></div>
+                <div class="word-unit" onclick="showWord('ἦν', 'ēn / 엔', 'εἰμί (eimi)', '계셨다, 있었다', 'was', '/wɒz/')"><span class="g-word">ἦν</span><span class="g-phonics">엔</span></div>
+                <div class="word-unit" onclick="showWord('ὁ', 'ho / 호', 'ὁ (ho)', '그 (관사)', 'the', '/ðə/')"><span class="g-word">ὁ</span><span class="g-phonics">호</span></div>
+                <div class="word-unit" onclick="showWord('λόγος', 'logos / 로고스', 'λόγος (logos)', '말씀', 'Word', '/wɜːd/')"><span class="g-word">λόγος</span>,<span class="g-phonics">로고스</span></div>
+                <div class="word-unit" onclick="showWord('καὶ', 'kai / 카이', 'καί (kai)', '그리고', 'and', '/ænd/')"><span class="g-word">καὶ</span><span class="g-phonics">카이</span></div>
+                <div class="word-unit" onclick="showWord('ὁ', 'ho / 호', 'ὁ (ho)', '그 (관사)', 'the', '/ðə/')"><span class="g-word">ὁ</span><span class="g-phonics">호</span></div>
+                <div class="word-unit" onclick="showWord('λόγος', 'logos / 로고스', 'λόγος (logos)', '말씀', 'Word', '/wɜːd/')"><span class="g-word">λόγος</span><span class="g-phonics">로고스</span></div>
+                <div class="word-unit" onclick="showWord('ἦν', 'ēn / 엔', 'εἰμί (eimi)', '계셨다, 있었다', 'was', '/wɒz/')"><span class="g-word">ἦν</span><span class="g-phonics">엔</span></div>
+                <div class="word-unit" onclick="showWord('πρὸς', 'pros / 프로스', 'πρός (pros)', '~와 함께, ~를 향하여', 'with / toward', '/wɪð/')"><span class="g-word">πρὸς</span><span class="g-phonics">프로스</span></div>
+                <div class="word-unit" onclick="showWord('τὸν', 'ton / 톤', 'ὁ (ho)', '그 (관사)', 'the', '/ðə/')"><span class="g-word">τὸν</span><span class="g-phonics">톤</span></div>
+                <div class="word-unit" onclick="showWord('θεόν', 'theon / 테온', 'θεός (theos)', '하나님', 'God', '/ɡɒd/')"><span class="g-word">θεόν</span>,<span class="g-phonics">테온</span></div>
+                <div class="word-unit" onclick="showWord('καὶ', 'kai / 카이', 'καί (kai)', '그리고', 'and', '/ænd/')"><span class="g-word">καὶ</span><span class="g-phonics">카이</span></div>
+                <div class="word-unit" onclick="showWord('θεὸς', 'theos / 테오스', 'θεός (theos)', '하나님', 'God', '/ɡɒd/')"><span class="g-word">θεὸς</span><span class="g-phonics">테오스</span></div>
+                <div class="word-unit" onclick="showWord('ἦν', 'ēn / 엔', 'εἰμί (eimi)', '계셨다, 이셨다', 'was', '/wɒz/')"><span class="g-word">ἦν</span><span class="g-phonics">엔</span></div>
+                <div class="word-unit" onclick="showWord('ὁ', 'ho / 호', 'ὁ (ho)', '그 (관사)', 'the', '/ðə/')"><span class="g-word">ὁ</span><span class="g-phonics">호</span></div>
+                <div class="word-unit" onclick="showWord('λόγος', 'logos / 로고스', 'λόγος (logos)', '말씀', 'Word', '/wɜːd/')"><span class="g-word">λόγος</span>.<span class="g-phonics">로고스</span></div>
+            </div>
+        </div>
+
+        <div class="clause-unit">
+            <span class="clause-tag">[1:1a]</span> 
+            <span style="font-weight:600;">Ἐν ἀρχῇ ἦν ὁ λόγος</span>
+            <span class="clause-eng">(In the beginning was the Word)</span>
+            <button class="audio-play-btn" onclick="playAudioDirect('Ἐν ἀρχῇ ἦν ὁ λόγος', 'In the beginning was the Word')">🔊 Play</button>
+        </div>
+
+        <div class="clause-unit">
+            <span class="clause-tag">[1:1b]</span> 
+            <span style="font-weight:600;">καὶ ὁ λόγος ἦν πρὸς τὸν θεόν</span>
+            <span class="clause-eng">(and the Word was with God)</span>
+            <button class="audio-play-btn" onclick="playAudioDirect('καὶ ὁ λόγος ἦν πρὸς τὸν θεόν', 'and the Word was with God')">🔊 Play</button>
+        </div>
+
+        <div class="clause-unit">
+            <span class="clause-tag">[1:1c]</span> 
+            <span style="font-weight:600;">καὶ θεὸς ἦν ὁ λόγος</span>
+            <span class="clause-eng">(and the Word was God)</span>
+            <button class="audio-play-btn" onclick="playAudioDirect('καὶ θεὸς ἦν ὁ λόγος', 'and the Word was God')">🔊 Play</button>
+        </div>
+
+        <button class="toggle-btn" onclick="toggleAccordion(this)">💡 [1:1] Grammar & Analysis</button>
+
+        <div class="details-panel">
+            <div class="details-content">
+                <div class="section-h4">📌 [1:1a] Ἐν ἀρχῇ ἦν ὁ λόγος</div>
+                <div class="literal-translation">
+                    <strong>Literal Eng:</strong> In the beginning was the Word<br>
+                    <strong>Literal Kor:</strong> 태초에 말씀이 계셨다
+                </div>
+                <ul class="grammar-list">
+                    <li><strong>Ἐν (In <span class="ipa">/ɪn/</span>):</strong> <span class="g-term" onclick="showGrammar('Preposition (전치사)', '/ˌprep.əˈzɪʃ.ən/', '명사나 대명사 앞에 위치하여 관계를 나타내는 품사.')">Preposition</span> taking the <span class="g-term" onclick="showGrammar('Dative (여격)', '/ˈdeɪ.tɪv/', '위치, 장소, 시점을 나타내는 격.')">Dative <span class="ipa">/ˈdeɪ.tɪv/</span></span> case.</li>
+                    <li><strong>ἀρχῇ (beginning <span class="ipa">/bɪˈɡɪn.ɪŋ/</span>):</strong> Dative singular. <span class="g-term" onclick="showGrammar('Anarthous (무관사)', '/ænˈɑːr.θrəs/', '관사가 붙지 않은 상태. 절대적 시작을 강조함.')">Anarthous <span class="ipa">/ænˈɑːr.θrəs/</span></span> after a preposition.</li>
+                    <li><strong>ἦν (was <span class="ipa">/wɒz/</span>):</strong> <span class="g-term" onclick="showGrammar('Imperfect Tense (미완료 시제)', '/ɪmˈpɜː.fɪkt tens/', '과거에 계속해서 일어난 동작이나 상태를 표현함.')">Imperfect <span class="ipa">/ɪmˈpɜː.fɪkt/</span></span> active indicative 3rd person singular of εἰμί.</li>
+                    <li><strong>ὁ λόγος (the Word <span class="ipa">/ðə wɜːd/</span>):</strong> <span class="g-term" onclick="showGrammar('Nominative (주격)', '/ˈnɒm.ɪ.nə.tɪv/', '문장의 주어를 나타내는 격.')">Nominative <span class="ipa">/ˈnɒm.ɪ.nə.tɪv/</span></span> singular masculine with article.</li>
+                </ul>
+                <div class="insight-box">
+                    <strong>Exegetical Insight:</strong> The imperfect tense <strong>ἦν</strong> emphasizes that when "the beginning" occurred, the Word was <em>already in existence</em>.
+                </div>
+                <button class="collapse-bottom-btn" onclick="toggleAccordion(this)">▲ Collapse Analysis</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- John 1:2 -->
+    <div class="verse-card">
+        <div class="verse-title">📖 John 1:2</div>
+        <div class="combined-verse">
+            <div class="greek-text">
+                <div class="word-unit" onclick="showWord('οὗτος', 'houtos / 후토스', 'οὗτος (houtos)', '이 분이', 'This One', '/ðɪs wʌn/')"><span class="g-word">οὗτος</span><span class="g-phonics">후토스</span></div>
+                <div class="word-unit" onclick="showWord('ἦν', 'ēn / 엔', 'εἰμί (eimi)', '계셨다', 'was', '/wɒz/')"><span class="g-word">ἦν</span><span class="g-phonics">엔</span></div>
+                <div class="word-unit" onclick="showWord('ἐν', 'en / 엔', 'ἐν (en)', '~안에', 'in', '/ɪn/')"><span class="g-word">ἐν</span><span class="g-phonics">엔</span></div>
+                <div class="word-unit" onclick="showWord('ἀρχῇ', 'archē / 아르케', 'ἀρχή (archē)', '태초에', 'beginning', '/bɪˈɡɪn.ɪŋ/')"><span class="g-word">ἀρχῇ</span><span class="g-phonics">아르케</span></div>
+                <div class="word-unit" onclick="showWord('πρὸς', 'pros / 프로스', 'πρός (pros)', '~와 함께', 'with', '/wɪð/')"><span class="g-word">πρὸς</span><span class="g-phonics">프로스</span></div>
+                <div class="word-unit" onclick="showWord('τὸν', 'ton / 톤', 'ὁ (ho)', '그', 'the', '/ðə/')"><span class="g-word">τὸν</span><span class="g-phonics">톤</span></div>
+                <div class="word-unit" onclick="showWord('θεόν', 'theon / 테온', 'θεός (theos)', '하나님을', 'God', '/ɡɒd/')"><span class="g-word">θεόν</span>.<span class="g-phonics">테온</span></div>
+            </div>
+        </div>
+
+        <div class="clause-unit">
+            <span class="clause-tag">[1:2a]</span> 
+            <span style="font-weight:600;">οὗτος ἦν ἐν ἀρχῇ</span>
+            <span class="clause-eng">(He was in the beginning)</span>
+            <button class="audio-play-btn" onclick="playAudioDirect('οὗτος ἦν ἐν ἀρχῇ', 'He was in the beginning')">🔊 Play</button>
+        </div>
+
+        <div class="clause-unit">
+            <span class="clause-tag">[1:2b]</span> 
+            <span style="font-weight:600;">πρὸς τὸν θεόν</span>
+            <span class="clause-eng">(with God)</span>
+            <button class="audio-play-btn" onclick="playAudioDirect('πρὸς τὸν θεόν', 'with God')">🔊 Play</button>
+        </div>
+
+        <button class="toggle-btn" onclick="toggleAccordion(this)">💡 [1:2] Grammar & Analysis</button>
+
+        <div class="details-panel">
+            <div class="details-content">
+                <div class="section-h4">📌 [1:2a-b] οὗτος ἦν ἐν ἀρχῇ πρὸς τὸν θεόν</div>
+                <div class="literal-translation">
+                    <strong>Literal Eng:</strong> He was in the beginning with God<br>
+                    <strong>Literal Kor:</strong> 이 분이 태초에 하나님과 함께 계셨다
+                </div>
+                <ul class="grammar-list">
+                    <li>
+                        <strong>οὗτος (He / This One <span class="ipa">/ðɪs wʌn/</span>):</strong> 
+                        <span class="g-term" onclick="showGrammar('Demonstrative Pronoun (지시대명사)', '/dɪˈmɒn.strə.tɪv ˈproʊ.naʊn/', '특정한 사람이나 사물을 가리키는 대명사.')">Demonstrative pronoun</span>, nominative masculine singular, referring back to ὁ λόγος.
+                    </li>
+                    <li>
+                        <strong>ἦν (was <span class="ipa">/wɒz/</span>):</strong> 
+                        Imperfect active indicative 3rd person singular of εἰμί.
+                    </li>
+                    <li>
+                        <strong>πρὸς τὸν θεόν (with God <span class="ipa">/wɪð ɡɒd/</span>):</strong> 
+                        Prepositional phrase taking the accusative case, showing intimate relationship with God the Father.
+                    </li>
+                </ul>
+                <div class="insight-box">
+                    <strong>Exegetical Insight:</strong> Reaffirms the eternal fellowship between the Son and the Father before creation.
+                </div>
+                <button class="collapse-bottom-btn" onclick="toggleAccordion(this)">▲ Collapse Analysis</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- John 1:3 -->
+    <div class="verse-card">
+        <div class="verse-title">📖 John 1:3</div>
+        <div class="combined-verse">
+            <div class="greek-text">
+                <div class="word-unit" onclick="showWord('πάντα', 'panta / 판타', 'πᾶς (pas)', '만물, 모든 것', 'All things', '/ɔːl θɪŋz/')"><span class="g-word">πάντα</span><span class="g-phonics">판타</span></div>
+                <div class="word-unit" onclick="showWord('δι’', 'di\' / 디', 'διά (dia)', '~를 통하여', 'through', '/θruː/')"><span class="g-word">δι’</span><span class="g-phonics">디</span></div>
+                <div class="word-unit" onclick="showWord('αὐτοῦ', 'autou / 아우투', 'αὐτός (autos)', '그를', 'Him', '/hɪm/')"><span class="g-word">αὐτοῦ</span><span class="g-phonics">아우투</span></div>
+                <div class="word-unit" onclick="showWord('ἐγένετο', 'egeneto / 에게네토', 'γίνομαι (ginomai)', '지은 바 되었다', 'came into being', '/keɪm ˈɪn.tuː ˈbiː.ɪŋ/')"><span class="g-word">ἐγένετο</span>,<span class="g-phonics">에게네토</span></div>
+                <div class="word-unit" onclick="showWord('καὶ', 'kai / 카이', 'καί (kai)', '그리고', 'and', '/ænd/')"><span class="g-word">καὶ</span><span class="g-phonics">카이</span></div>
+                <div class="word-unit" onclick="showWord('χωρὶς', 'chōris / 호리스', 'χωρίς (choris)', '~없이', 'apart from', '/əˈpɑːt frɒm/')"><span class="g-word">χωρὶς</span><span class="g-phonics">호리스</span></div>
+                <div class="word-unit" onclick="showWord('αὐτοῦ', 'autou / 아우투', 'αὐτός (autos)', '그를', 'Him', '/hɪm/')"><span class="g-word">αὐτοῦ</span><span class="g-phonics">아우투</span></div>
+                <div class="word-unit" onclick="showWord('ἐγένετο', 'egeneto / 에게네토', 'γίνομαι (ginomai)', '지은 바 되었다', 'came into being', '/keɪm ˈɪn.tuː ˈbiː.ɪŋ/')"><span class="g-word">ἐγένετο</span><span class="g-phonics">에게네토</span></div>
+                <div class="word-unit" onclick="showWord('οὐδὲ', 'oude / 우데', 'οὐδέ (oude)', '하나도', 'not even', '/nɒt ˈiː.vən/')"><span class="g-word">οὐδὲ</span><span class="g-phonics">우데</span></div>
+                <div class="word-unit" onclick="showWord('ἕν', 'hen / 헨', 'εἷς (heis)', '한 가지도', 'one thing', '/wʌn θɪŋ/')"><span class="g-word">ἕν</span>.<span class="g-phonics">헨</span></div>
+                <div class="word-unit" onclick="showWord('ὃ', 'ho / 호', 'ὅς (hos)', '~한 것', 'that', '/ðæt/')"><span class="g-word">ὃ</span><span class="g-phonics">호</span></div>
+                <div class="word-unit" onclick="showWord('γέγονεν', 'gegonen / 게고넨', 'γίνομαι (ginomai)', '지은 바 된 것', 'has come into being', '/hæz kʌm ˈɪn.tuː ˈbiː.ɪŋ/')"><span class="g-word">γέγονεν</span>.<span class="g-phonics">게고넨</span></div>
+            </div>
+        </div>
+
+        <div class="clause-unit">
+            <span class="clause-tag">[1:3a]</span> 
+            <span style="font-weight:600;">πάντα δι’ αὐτοῦ ἐγένετο</span>
+            <span class="clause-eng">(All things came into being through Him)</span>
+            <button class="audio-play-btn" onclick="playAudioDirect('πάντα δι’ αὐτοῦ ἐγένετο', 'All things came into being through Him')">🔊 Play</button>
+        </div>
+
+        <div class="clause-unit">
+            <span class="clause-tag">[1:3b]</span> 
+            <span style="font-weight:600;">καὶ χωρὶς αὐτοῦ ἐγένετο οὐδὲ ἕν</span>
+            <span class="clause-eng">(and apart from Him came into being not even one thing)</span>
+            <button class="audio-play-btn" onclick="playAudioDirect('καὶ χωρὶς αὐτοῦ ἐγένετο οὐδὲ ἕν', 'and apart from Him came into being not even one thing')">🔊 Play</button>
+        </div>
+
+        <div class="clause-unit">
+            <span class="clause-tag">[1:3c]</span> 
+            <span style="font-weight:600;">ὃ γέγονεν</span>
+            <span class="clause-eng">(that has come into being)</span>
+            <button class="audio-play-btn" onclick="playAudioDirect('ὃ γέγονεν', 'that has come into being')">🔊 Play</button>
+        </div>
+
+        <button class="toggle-btn" onclick="toggleAccordion(this)">💡 [1:3] Grammar & Analysis</button>
+
+        <div class="details-panel">
+            <div class="details-content">
+                <div class="section-h4">📌 [1:3a] πάντα δι’ αὐτοῦ ἐγένετο</div>
+                <div class="literal-translation">
+                    <strong>Literal Eng:</strong> All things came into being through Him<br>
+                    <strong>Literal Kor:</strong> 만물이 그를 통하여 지은 바 되었다
+                </div>
+                <ul class="grammar-list">
+                    <li><strong>πάντα (all things):</strong> Nominative neuter plural of πᾶς. Neuter plural subject takes a singular verb.</li>
+                    <li>
+                        <strong>ἐγένετο (came into being <span class="ipa">/keɪm ˈɪn.tuː ˈbiː.ɪŋ/</span>):</strong> 
+                        <span class="g-term" onclick="showGrammar('Aorist Tense (부정과거 시제)', '/ˈeɪ.ə.rɪst tens/', '과거의 단회적 사건이나 창조의 한 시점을 나타냄.')">Aorist</span> middle indicative 3rd person singular of γίνομαι.
+                    </li>
+                    <li>
+                        <strong>γέγονεν (has come into being <span class="ipa">/hæz kʌm ˈɪn.tuː ˈbiː.ɪŋ/</span>):</strong> 
+                        <span class="g-term" onclick="showGrammar('Perfect Tense (완료 시제)', '/ˈpɜː.fɪkt tens/', '과거에 완료된 동작의 결과가 현재까지 지속됨을 나타냄.')">Perfect</span> active indicative 3rd person singular.
+                    </li>
+                </ul>
+                <div class="insight-box">
+                    <strong>Exegetical Insight:</strong> Contrasts <strong>ἐγένετο</strong> (created origination) with <strong>ἦν</strong> (eternal uncreated existence) in verses 1-2.
+                </div>
+                <button class="collapse-bottom-btn" onclick="toggleAccordion(this)">▲ Collapse Analysis</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- John 1:4 -->
+    <div class="verse-card">
+        <div class="verse-title">📖 John 1:4</div>
+        <div class="combined-verse">
+            <div class="greek-text">
+                <div class="word-unit" onclick="showWord('ἐν', 'en / 엔', 'ἐν (en)', '~안에', 'in', '/ɪn/')"><span class="g-word">ἐν</span><span class="g-phonics">엔</span></div>
+                <div class="word-unit" onclick="showWord('αὐτῷ', 'autō / 아우토', 'αὐτός (autos)', '그분 안에', 'Him', '/hɪm/')"><span class="g-word">αὐτῷ</span><span class="g-phonics">아우토</span></div>
+                <div class="word-unit" onclick="showWord('ζωὴ', 'zōē / 조에', 'ζωή (zōē)', '생명이', 'life', '/laɪf/')"><span class="g-word">ζωὴ</span><span class="g-phonics">조에</span></div>
+                <div class="word-unit" onclick="showWord('ἦν', 'ēn / 엔', 'εἰμί (eimi)', '있었고', 'was', '/wɒz/')"><span class="g-word">ἦν</span>,<span class="g-phonics">엔</span></div>
+                <div class="word-unit" onclick="showWord('καὶ', 'kai / 카이', 'καί (kai)', '그리고', 'and', '/ænd/')"><span class="g-word">καὶ</span><span class="g-phonics">카이</span></div>
+                <div class="word-unit" onclick="showWord('ἡ', 'hē / 헤', 'ὁ (ho)', '그', 'the', '/ðə/')"><span class="g-word">ἡ</span><span class="g-phonics">헤</span></div>
+                <div class="word-unit" onclick="showWord('ζωὴ', 'zōē / 조에', 'ζωή (zōē)', '생명은', 'life', '/laɪf/')"><span class="g-word">ζωὴ</span><span class="g-phonics">조에</span></div>
+                <div class="word-unit" onclick="showWord('ἦν', 'ēn / 엔', 'εἰμί (eimi)', '이었다', 'was', '/wɒz/')"><span class="g-word">ἦν</span><span class="g-phonics">엔</span></div>
+                <div class="word-unit" onclick="showWord('τὸ', 'to / 토', 'ὁ (ho)', '그', 'the', '/ðə/')"><span class="g-word">τὸ</span><span class="g-phonics">토</span></div>
+                <div class="word-unit" onclick="showWord('φῶς', 'phōs / 포스', 'φῶς (phōs)', '빛', 'light', '/laɪt/')"><span class="g-word">φῶς</span><span class="g-phonics">포스</span></div>
+                <div class="word-unit" onclick="showWord('τῶν', 'tōn / 톤', 'ὁ (ho)', '사람들의', 'of men', '/əv men/')"><span class="g-word">τῶν</span><span class="g-phonics">톤</span></div>
+                <div class="word-unit" onclick="showWord('ἀνθρώπων', 'anthrōpōn / 안스로폰', 'ἄνθρωπος (anthrōpos)', '사람들의', 'men', '/men/')"><span class="g-word">ἀνθρώπων</span>.<span class="g-phonics">안스로폰</span></div>
+            </div>
+        </div>
+
+        <div class="clause-unit">
+            <span class="clause-tag">[1:4a]</span> 
+            <span style="font-weight:600;">ἐν αὐτῷ ζωὴ ἦν</span>
+            <span class="clause-eng">(In Him was life)</span>
+            <button class="audio-play-btn" onclick="playAudioDirect('ἐν αὐτῷ ζωὴ ἦν', 'In Him was life')">🔊 Play</button>
+        </div>
+
+        <div class="clause-unit">
+            <span class="clause-tag">[1:4b]</span> 
+            <span style="font-weight:600;">καὶ ἡ ζωὴ ἦν τὸ φῶς τῶν ἀνθρώπων</span>
+            <span class="clause-eng">(and the life was the light of men)</span>
+            <button class="audio-play-btn" onclick="playAudioDirect('καὶ ἡ ζωὴ ἦν τὸ φῶς τῶν ἀνθρώπων', 'and the life was the light of men')">🔊 Play</button>
+        </div>
+
+        <button class="toggle-btn" onclick="toggleAccordion(this)">💡 [1:4] Grammar & Analysis</button>
+
+        <div class="details-panel">
+            <div class="details-content">
+                <div class="section-h4">📌 [1:4a-b] ἐν αὐτῷ ζωὴ ἦν καὶ ἡ ζωὴ ἦν τὸ φῶς τῶν ἀνθρώπων</div>
+                <div class="literal-translation">
+                    <strong>Literal Eng:</strong> In Him was life, and the life was the light of men<br>
+                    <strong>Literal Kor:</strong> 그분 안에 생명이 있었으니, 그 생명은 사람들의 빛이었다
+                </div>
+                <ul class="grammar-list">
+                    <li>
+                        <strong>ζωὴ (life <span class="ipa">/laɪf/</span>):</strong> 
+                        Nominative singular feminine of ζωή. Denotes divine, uncreated life.
+                    </li>
+                    <li>
+                        <strong>τὸ φῶς (the light <span class="ipa">/ðə laɪt/</span>):</strong> 
+                        <span class="g-term" onclick="showGrammar('Predicate Nominative (술어 주격)', '/ˈprɛd.ɪ.kət ˈnɒm.ɪ.nə.tɪv/', '주어를 설명하는 보어 역할을 하는 주격.')">Predicate nominative</span> neuter singular of φῶς.
+                    </li>
+                    <li>
+                        <strong>τῶν ἀνθρώπων (of men <span class="ipa">/əv men/</span>):</strong> 
+                        <span class="g-term" onclick="showGrammar('Genitive Case (소유격)', '/ˈdʒɛn.ɪ.tɪv keɪs/', '소유, 출처, 대상을 나타내는 격.')">Genitive plural masculine</span> of ἄνθρωπος.
+                    </li>
+                </ul>
+                <div class="insight-box">
+                    <strong>Exegetical Insight:</strong> Divine life is inherent in the Word and functions as spiritual illumination for humanity.
+                </div>
+                <button class="collapse-bottom-btn" onclick="toggleAccordion(this)">▲ Collapse Analysis</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- John 1:5 -->
+    <div class="verse-card">
+        <div class="verse-title">📖 John 1:5</div>
+        <div class="combined-verse">
+            <div class="greek-text">
+                <div class="word-unit" onclick="showWord('καὶ', 'kai / 카이', 'καί (kai)', '그리고', 'and', '/ænd/')"><span class="g-word">καὶ</span><span class="g-phonics">카이</span></div>
+                <div class="word-unit" onclick="showWord('τὸ', 'to / 토', 'ὁ (ho)', '그', 'the', '/ðə/')"><span class="g-word">τὸ</span><span class="g-phonics">토</span></div>
+                <div class="word-unit" onclick="showWord('φῶς', 'phōs / 포스', 'φῶς (phōs)', '빛이', 'light', '/laɪt/')"><span class="g-word">φῶς</span><span class="g-phonics">포스</span></div>
+                <div class="word-unit" onclick="showWord('ἐν', 'en / 엔', 'ἐν (en)', '~안에', 'in', '/ɪn/')"><span class="g-word">ἐν</span><span class="g-phonics">엔</span></div>
+                <div class="word-unit" onclick="showWord('τῇ', 'tē / 테', 'ὁ (ho)', '그', 'the', '/ðə/')"><span class="g-word">τῇ</span><span class="g-phonics">테</span></div>
+                <div class="word-unit" onclick="showWord('σκοτίᾳ', 'skotia / 스코티아', 'σκοτία (skotia)', '어둠 속에', 'darkness', '/ˈdɑːrk.nəs/')"><span class="g-word">σκοτίᾳ</span><span class="g-phonics">스코티아</span></div>
+                <div class="word-unit" onclick="showWord('φαίνει', 'phainei / 파이네이', 'φαίνω (phainō)', '비치고 있다', 'shines', '/ʃaɪnz/')"><span class="g-word">φαίνει</span>,<span class="g-phonics">파이네이</span></div>
+                <div class="word-unit" onclick="showWord('καὶ', 'kai / 카이', 'καί (kai)', '그리고', 'and', '/ænd/')"><span class="g-word">καὶ</span><span class="g-phonics">카이</span></div>
+                <div class="word-unit" onclick="showWord('ἡ', 'hē / 헤', 'ὁ (ho)', '그', 'the', '/ðə/')"><span class="g-word">ἡ</span><span class="g-phonics">헤</span></div>
+                <div class="word-unit" onclick="showWord('σκοτία', 'skotia / 스코티아', 'σκοτία (skotia)', '어둠이', 'darkness', '/ˈdɑːrk.nəs/')"><span class="g-word">σκοτία</span><span class="g-phonics">스코티아</span></div>
+                <div class="word-unit" onclick="showWord('αὐτὸ', 'auto / 아우토', 'αὐτός (autos)', '그것을', 'it', '/ɪt/')"><span class="g-word">αὐτὸ</span><span class="g-phonics">아우토</span></div>
+                <div class="word-unit" onclick="showWord('οὐ', 'ou / 우', 'οὐ (ou)', '이겨내지/깨닫지', 'not', '/nɒt/')"><span class="g-word">οὐ</span><span class="g-phonics">우</span></div>
+                <div class="word-unit" onclick="showWord('κατέλαβεν', 'katelaben / 카텔라벤', 'καταλαμβάνω (katalambanō)', '못했다', 'overcame', '/ˌoʊ.vərˈkeɪm/')"><span class="g-word">κατέλαβεν</span>.<span class="g-phonics">카텔라벤</span></div>
+            </div>
+        </div>
+
+        <div class="clause-unit">
+            <span class="clause-tag">[1:5a]</span> 
+            <span style="font-weight:600;">καὶ τὸ φῶς ἐν τῇ σκοτίᾳ φαίνει</span>
+            <span class="clause-eng">(and the light shines in the darkness)</span>
+            <button class="audio-play-btn" onclick="playAudioDirect('καὶ τὸ φῶς ἐν τῇ σκοτίᾳ φαίνει', 'and the light shines in the darkness')">🔊 Play</button>
+        </div>
+
+        <div class="clause-unit">
+            <span class="clause-tag">[1:5b]</span> 
+            <span style="font-weight:600;">καὶ ἡ σκοτία αὐτὸ οὐ κατέλαβεν</span>
+            <span class="clause-eng">(and the darkness did not overcome it)</span>
+            <button class="audio-play-btn" onclick="playAudioDirect('καὶ ἡ σκοτία αὐτὸ οὐ κατέλαβεν', 'and the darkness did not overcome it')">🔊 Play</button>
+        </div>
+
+        <button class="toggle-btn" onclick="toggleAccordion(this)">💡 [1:5] Grammar & Analysis</button>
+
+        <div class="details-panel">
+            <div class="details-content">
+                <div class="section-h4">📌 [1:5a-b] καὶ τὸ φῶς ἐν τῇ σκοτίᾳ φαίνει καὶ ἡ σκοτία αὐτὸ οὐ κατέλαβεν</div>
+                <div class="literal-translation">
+                    <strong>Literal Eng:</strong> and the light shines in the darkness, and the darkness did not overcome it<br>
+                    <strong>Literal Kor:</strong> 그리고 그 빛이 어둠 속에 비치고 있으며, 어둠이 그것을 이기지 못했다
+                </div>
+                <ul class="grammar-list">
+                    <li>
+                        <strong>φαίνει (shines <span class="ipa">/ʃaɪnz/</span>):</strong> 
+                        <span class="g-term" onclick="showGrammar('Present Active Indicative (현재 능동태 직설법)', '/ˈprez.ənt ˈæk.tɪv ɪnˈdɪk.ə.tɪv/', '현재 계속해서 진행 중인 동작을 나타냄.')">Present active indicative</span> 3rd person singular of φαίνω.
+                    </li>
+                    <li>
+                        <strong>κατέλαβεν (overcame <span class="ipa">/ˌoʊ.vərˈkeɪm/</span>):</strong> 
+                        <span class="g-term" onclick="showGrammar('Aorist Active Indicative (부정과거 능동태 직설법)', '/ˈeɪ.ə.rɪst ˈæk.tɪv ɪnˈdɪk.ə.tɪv/', '과거의 단회적 사건을 나타냄.')">Aorist active indicative</span> 3rd person singular of καταλαμβάνω.
+                    </li>
+                </ul>
+                <div class="insight-box">
+                    <strong>Exegetical Insight:</strong> The light shines continuously (present tense), and darkness has never been able to overpower or extinguish it (aorist tense).
+                </div>
+                <button class="collapse-bottom-btn" onclick="toggleAccordion(this)">▲ Collapse Analysis</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Modal Dialog System -->
+<div class="modal-overlay" id="infoModal">
+    <div class="modal-card">
+        <div class="modal-header">
+            <span id="modalTitle">Title</span>
+            <button class="audio-btn" id="modalAudioBtn" onclick="speakModalGrammarTerm()" style="display: none;">🔊</button>
+        </div>
+        <div id="modalBody"></div>
+        <button class="modal-close-btn" onclick="closeModal()">Close / 닫기</button>
+    </div>
+</div>
+
+<script>
+    let currentGrammarEnglishTerm = "";
+
+    function toggleAccordion(element) {
+        let card = element.closest('.verse-card');
+        card.classList.toggle('active');
+        
+        let toggleBtn = card.querySelector('.toggle-btn');
+        if (card.classList.contains('active')) {
+            toggleBtn.innerText = '💡 Close Analysis';
+        } else {
+            toggleBtn.innerText = '💡 Grammar & Analysis';
+        }
+    }
+
+    function showWord(greek, pronunciation, lemma, korMeaning, engMeaning, ipa = "") {
+        document.getElementById('modalAudioBtn').style.display = 'none';
+        document.getElementById('modalTitle').innerText = `${greek} [Lemma: ${lemma}]`;
+        document.getElementById('modalBody').innerHTML = `
+            <div class="modal-row"><span class="modal-label">코이네 발음:</span> ${pronunciation}</div>
+            <div class="modal-row"><span class="modal-label">한국어 의미:</span> ${korMeaning}</div>
+            <div class="modal-row"><span class="modal-label">English Meaning:</span> ${engMeaning} <span class="ipa">${ipa}</span></div>
+        `;
+        document.getElementById('infoModal').style.display = 'flex';
+    }
+
+    function showGrammar(term, ipa, definition) {
+        currentGrammarEnglishTerm = term.split('(')[0].trim();
+        document.getElementById('modalAudioBtn').style.display = 'inline-block';
+        document.getElementById('modalTitle').innerText = term;
+        document.getElementById('modalBody').innerHTML = `
+            <div class="modal-row" style="font-size:1.05rem; color:#64748b; margin-bottom:12px;"><strong>IPA Pronunciation:</strong> <span class="ipa">${ipa}</span></div>
+            <div class="modal-row" style="font-size:1.1rem; line-height:1.7;">${definition}</div>
+        `;
+        document.getElementById('infoModal').style.display = 'flex';
+    }
+
+    function speakModalGrammarTerm() {
+        if (currentGrammarEnglishTerm && 'speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            let utterance = new SpeechSynthesisUtterance(currentGrammarEnglishTerm);
+            utterance.lang = 'en-US';
+            utterance.rate = 0.9;
+            window.speechSynthesis.speak(utterance);
+        }
+    }
+
+    function playAudioDirect(greekText, englishText) {
+        let greekUrl = "https://translate.google.com/translate_tts?ie=UTF-8&q=" + encodeURIComponent(greekText) + "&tl=el&client=tw-ob";
+        let englishUrl = "https://translate.google.com/translate_tts?ie=UTF-8&q=" + encodeURIComponent(englishText) + "&tl=en&client=tw-ob";
+
+        let greekAudio = new Audio(greekUrl);
+        let englishAudio = new Audio(englishUrl);
+
+        greekAudio.play().then(() => {
+            greekAudio.onended = function() {
+                englishAudio.play();
+            };
+        }).catch(err => {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                let gUtt = new SpeechSynthesisUtterance(greekText);
+                gUtt.lang = 'el-GR';
+                let eUtt = new SpeechSynthesisUtterance(englishText);
+                eUtt.lang = 'en-US';
+                gUtt.onend = () => window.speechSynthesis.speak(eUtt);
+                window.speechSynthesis.speak(gUtt);
+            }
+        });
+    }
+
+    function closeModal() {
+        document.getElementById('infoModal').style.display = 'none';
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+        }
+    }
+
+    window.onclick = function(event) {
+        let modal = document.getElementById('infoModal');
+        if (event.target == modal) {
+            closeModal();
+        }
+    }
+</script>
+
+</body>
+</html>
